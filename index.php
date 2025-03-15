@@ -17,20 +17,28 @@
 
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(5, 1fr); /* 5 movies per row */
             gap: 20px;
             padding: 20px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .movie {
             background-color: #333;
             padding: 10px;
             border-radius: 10px;
+            text-align: center;
         }
 
         .movie img {
-            width: 100%;
+            width: 180px; /* Fixed width */
+            height: 250px; /* Fixed height */
+            object-fit: cover; /* Ensures proper scaling */
             border-radius: 10px;
+            display: block;
+            margin: 0 auto;
         }
 
         .movie h3 {
@@ -46,15 +54,15 @@
     <script>
         const container = document.getElementById("movie-container");
 
-        fetch('http://localhost/onlinemovie/movies.php') // Change to your actual backend URL
+        fetch('movies.php')
             .then(response => response.json())
             .then(movies => {
-                container.innerHTML = ""; // Clear previous content
+                container.innerHTML = "";
                 movies.forEach(movie => {
                     const movieElement = document.createElement("div");
                     movieElement.classList.add("movie");
                     movieElement.innerHTML = `
-                        <img src="${movie.image}" alt="${movie.title}">
+                        <img src="admin/${movie.image}" alt="${movie.title}" loading="lazy">
                         <h3>${movie.title}</h3>
                         <p>${movie.description}</p>
                     `;

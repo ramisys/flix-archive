@@ -1,11 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
 
 $host = "localhost";
-$username = "root";  // Change this if needed
-$password = "";  // Change this if needed
-$database = "online_movie"; // Replace with your DB name
+$username = "root";
+$password = "";
+$database = "online_movie";
 
 $conn = new mysqli($host, $username, $password, $database);
 
@@ -13,14 +11,17 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
 }
 
-$sql = "SELECT * FROM movies";
+$sql = "SELECT title, description, image FROM movies";
 $result = $conn->query($sql);
 
 $movies = [];
 while ($row = $result->fetch_assoc()) {
+    // Ensure the correct URL path
     $movies[] = $row;
 }
 
-echo json_encode($movies);
 $conn->close();
+header('Content-Type: application/json');
+echo json_encode($movies);
+
 ?>
