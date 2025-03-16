@@ -1,13 +1,12 @@
 <?php
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "online_movie";
 
-$conn = new mysqli($host, $username, $password, $database);
+include("../db_connect.php");
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+session_start();
+
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: admin_login.php");
+    exit;
 }
 
 // Check if the form is submitted
@@ -18,7 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $director = $_POST['director'];
     $description = $_POST['description'];
     $rating = $_POST['rating'];
-    $added_by = $_POST['added_by'];
+    
+    $added_by = $_SESSION['admin_id'];
 
     // Handle Image Upload
     $imagePath = "uploads/default.jpg"; // Default image

@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['client_id'])) {
+    header("Location: user_login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +25,7 @@
 
         .container {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 5 movies per row */
+            grid-template-columns: repeat(5, 1fr);
             gap: 20px;
             padding: 20px;
             justify-content: center;
@@ -30,12 +38,18 @@
             padding: 10px;
             border-radius: 10px;
             text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .movie:hover {
+            transform: scale(1.05);
         }
 
         .movie img {
-            width: 180px; /* Fixed width */
-            height: 250px; /* Fixed height */
-            object-fit: cover; /* Ensures proper scaling */
+            width: 180px;
+            height: 250px;
+            object-fit: cover;
             border-radius: 10px;
             display: block;
             margin: 0 auto;
@@ -52,13 +66,15 @@
     <div class="container" id="movie-container"></div>
 
     <script>
-        const container = document.getElementById("movie-container");
-
         fetch('movies.php')
             .then(response => response.json())
             .then(movies => {
+                const container = document.getElementById("movie-container");
                 container.innerHTML = "";
+
                 movies.forEach(movie => {
+                    console.log("Movie:", movie); // Debugging
+
                     const movieElement = document.createElement("div");
                     movieElement.classList.add("movie");
                     movieElement.innerHTML = `
@@ -66,6 +82,12 @@
                         <h3>${movie.title}</h3>
                         <p>${movie.description}</p>
                     `;
+
+                    // Clickable box for movie details
+                    movieElement.addEventListener("click", () => {
+                        window.location.href = `movie_details.php?movie_id=${movie.movie_id}`;
+                    });
+
                     container.appendChild(movieElement);
                 });
             })

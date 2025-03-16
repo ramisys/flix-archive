@@ -1,17 +1,8 @@
 <?php
 
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "online_movie";
+require("db_connect.php");
 
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
-}
-
-$sql = "SELECT title, description, image FROM movies";
+$sql = "SELECT movie_id, title, description, image FROM movies";
 $result = $conn->query($sql);
 
 $movies = [];
